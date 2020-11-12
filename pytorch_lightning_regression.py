@@ -12,7 +12,7 @@ from pytorch_lightning.logging import TensorBoardLogger
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 
 
-data_path = "./data/"
+data_path = "./"
 
 
 class ImageDataset(Dataset):
@@ -150,7 +150,7 @@ class LitClassifier(pl.LightningModule):
 
     def setup(self, stage):
 
-        image_data = ImageDataset(pickle_file=f"{data_path}df.pkl", image_dir=f"{data_path}processed_images/")
+        image_data = ImageDataset(pickle_file=f"{data_path}df_prot4.pkl", image_dir=f"{data_path}processed_images/")
 
         train_size = int(0.80 * len(image_data))
         val_size = int((len(image_data) - train_size) / 2)
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     early_stop_callback = EarlyStopping(monitor="val_loss", min_delta=5000, patience=7, verbose=False, mode="min")
 
     model = LitClassifier()
-    trainer = pl.Trainer(gpus=1, logger=logger, early_stop_callback=early_stop_callback)
+    trainer = pl.Trainer(gpus=None, logger=logger, early_stop_callback=early_stop_callback)
 
     lr_finder = trainer.lr_find(model)
     fig = lr_finder.plot(suggest=True, show=True)
